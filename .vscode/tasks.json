@@ -1,0 +1,99 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // ---------------------------
+        // MinGW (g++) build task
+        // ---------------------------
+        {
+            "type": "shell",
+            "label": "C/C++: g++.exe build active file (MinGW)",
+            "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+            "args": [
+                "-g2",
+                "-O3",
+                "-DNDEBUG",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-D_WIN32_WINNT=0x0501",
+                "-lpthread",
+                "-L${workspaceFolder}\\lib\\cryptopp\\gcc",
+                "-l:libcryptopp.a",
+                "-I${workspaceFolder}\\include\\cryptopp", // Sửa đường dẫn đến thư mục include chứa file header
+                "-Wall"
+            ],
+            "options": {
+                "cwd": "${fileDirname}" // Sửa đường dẫn thư mục làm việc hiện tại
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "compiler: MinGW g++.exe"
+        },
+
+        // ---------------------------
+        // MSVC (cl.exe) build task
+        // ---------------------------
+        {
+            "type": "shell",
+            "label": "C/C++: cl.exe build active file (MSVC)",
+            "command": "cl.exe",
+            "args": [
+                "/EHsc",
+                "/Zi", // Enable debugging information
+                "/MTd", // Use the debug version of the static runtime library
+                "/O2", // Optimize for speed
+                //"/DNDEBUG", // Disable debugging macros
+                "/Fe:${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${file}",
+                "/I${workspaceFolder}\\include\\cryptopp", // Thay ${workspaceFolder} bằng đường dẫn thực tế
+                "/link",
+                "/LIBPATH:${workspaceFolder}\\lib\\cryptopp\\msvc", // Thay ${workspaceFolder} bằng đường dẫn thực tế
+                "cryptlib.lib"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": ["$msCompile"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "compiler: Microsoft cl.exe"
+        },
+
+        // ---------------------------
+        // Clang++ build task
+        // ---------------------------
+        {
+            "type": "shell",
+            "label": "C/C++: clang++ build active file (Clang)",
+            "command": "C:\\msys64\\mingw64\\bin\\clang++.exe",
+            "args": [
+                "-std=c++17",
+                // "-O3",
+                "-DNDEBUG",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-D_WIN32_WINNT=0x0501",
+                "-lpthread",
+                "-L${workspaceFolder}\\lib\\cryptopp\\clang", // Thay ${workspaceFolder} bằng đường dẫn thực tế
+                "-l:libcryptopp.a",
+                "-I${workspaceFolder}\\include\\cryptopp", // Thay ${workspaceFolder} bằng đường dẫn thực tế
+                "-Wall"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "compiler: Clang++"
+        }
+    ]
+}
